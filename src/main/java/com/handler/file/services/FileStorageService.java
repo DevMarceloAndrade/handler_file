@@ -14,7 +14,10 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 @Service
 public class FileStorageService {
@@ -65,5 +68,11 @@ public class FileStorageService {
                 .path(downloadPath)
                 .toUriString();
         return new UploadFileResponseVO(fileName, fileDownloadUri,file.getContentType(), file.getSize());
+    }
+
+    public List<UploadFileResponseVO> uploadMultipleFiles(MultipartFile[] files, String... subDirs){
+        return Arrays.stream(files)
+                .map(file -> uploadFile(file,subDirs))
+                .collect(Collectors.toList());
     }
 }
