@@ -4,13 +4,12 @@ package com.handler.file.controllers;
 import com.handler.file.services.FileStorageService;
 import com.handler.file.vo.v1.UploadFileResponseVO;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.util.StringUtils;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import java.io.IOException;
 import java.util.List;
 
 @RestController
@@ -27,5 +26,11 @@ public class FileController {
     @PostMapping("/uploadMultipleFiles")
     public List<UploadFileResponseVO> uploadMultipleFiles(@RequestParam("files")MultipartFile[] files){
         return fileStorageService.uploadMultipleFiles(files,"tech","item1");
+    }
+
+    @DeleteMapping("/deleteFile")
+    public String deleteFile(@RequestBody UploadFileResponseVO file) {
+        
+        return fileStorageService.deleteFile(StringUtils.cleanPath(file.getFileName()),file.getFileTargetLocation());
     }
 }

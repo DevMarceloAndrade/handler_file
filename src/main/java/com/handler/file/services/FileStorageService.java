@@ -3,6 +3,7 @@ package com.handler.file.services;
 
 import com.handler.file.config.FileStorageConfig;
 import com.handler.file.exceptions.FileStorageException;
+import com.handler.file.exceptions.MyFileNotFoundException;
 import com.handler.file.vo.v1.UploadFileResponseVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -10,6 +11,7 @@ import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -21,12 +23,16 @@ import java.util.stream.Collectors;
 
 @Service
 public class FileStorageService {
-
+    private final Path storageBaseLocation;
+    private final Path UPLOAD_STANDARD_PATH =Path.of("files/");
     private final Path fileStorageLocation;
 
     @Autowired
     public FileStorageService(FileStorageConfig fileStorageConfig) {
-        this.fileStorageLocation = Paths.get(fileStorageConfig.getUploadDir())
+        this.storageBaseLocation = Path.of(fileStorageConfig.getUploadDir());
+
+        this.fileStorageLocation = storageBaseLocation
+                .resolve(UPLOAD_STANDARD_PATH)
                 .toAbsolutePath()
                 .normalize();
         try {
@@ -56,23 +62,33 @@ public class FileStorageService {
     }
 
     public UploadFileResponseVO uploadFile(MultipartFile file, String... subDirs){
-        Path standardPath = Path.of("/files/");
 
         String fileName = this.storeFile(file,subDirs);
 
         String downloadPath = (subDirs == null || subDirs.length == 0)?
-                standardPath.resolve(fileName).toString():
-                standardPath.resolve(Paths.get("",subDirs)).resolve(fileName).toString();
+                UPLOAD_STANDARD_PATH.resolve(fileName).toString():
+                UPLOAD_STANDARD_PATH.resolve(Paths.get("",subDirs)).resolve(fileName).toString();
 
         String fileDownloadUri = ServletUriComponentsBuilder.fromCurrentContextPath()
                 .path(downloadPath)
                 .toUriString();
-        return new UploadFileResponseVO(fileName, fileDownloadUri,file.getContentType(), file.getSize());
+        return new UploadFileResponseVO(fileName, fileDownloadUri, downloadPath, file.getContentType(), file.getSize());
     }
 
     public List<UploadFileResponseVO> uploadMultipleFiles(MultipartFile[] files, String... subDirs){
         return Arrays.stream(files)
                 .map(file -> uploadFile(file,subDirs))
                 .collect(Collectors.toList());
+    }
+
+    public String deleteFile(String fileName, String fileTargetLocation) {
+
+        try {
+            Path filePath = storageBaseLocation.resolve(fileTargetLocation);
+            Files.deleteIfExists(filePath);
+            return "File " + fileName + " deleted successfully.";
+        } catch (IOException e) {
+            throw new MyFileNotFoundException("File " + fileName + "not found. ");
+        }
     }
 }
