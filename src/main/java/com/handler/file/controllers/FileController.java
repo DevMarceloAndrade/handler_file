@@ -11,6 +11,8 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/api/file/v1")
 public class FileController {
@@ -20,5 +22,10 @@ public class FileController {
     @PostMapping("/uploadFile")
     public UploadFileResponseVO uploadFile(@RequestParam("file")MultipartFile file){
         return fileStorageService.uploadFile(file,"tech","item1");
+    }
+
+    @PostMapping("/uploadMultipleFiles")
+    public List<UploadFileResponseVO> uploadMultipleFiles(@RequestParam("files")MultipartFile[] files){
+        return fileStorageService.uploadMultipleFiles(files,"tech","item1");
     }
 }
