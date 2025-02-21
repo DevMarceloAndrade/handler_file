@@ -91,4 +91,10 @@ public class FileStorageService {
             throw new MyFileNotFoundException("File " + fileName + "not found. ");
         }
     }
+
+    public List<String> deleteMultipleFiles(UploadFileResponseVO[] files){
+        return Arrays.stream(files)
+                .map(file -> deleteFile(file.getFileName(),file.getFileTargetLocation()))
+                .collect(Collectors.toList());
+    }
 }
