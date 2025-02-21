@@ -10,7 +10,7 @@
 	</parent>
 	<groupId>com.handler</groupId>
 	<artifactId>handler-file</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
+	<version>0.0.1</version>
 	<name>handler-file</name>
 	<description>Demo project for Spring Boot</description>
 	<url/>
@@ -26,7 +26,12 @@
 		<developerConnection>scm:git:ssh://git@github.com/DevMarceloAndrade/handler_file.git</developerConnection>
 		<tag>HEAD</tag>
 	</scm>
-
+	<repositories>
+		<repository>
+			<id>jitpack.io</id>
+			<url>https://jitpack.io</url>
+		</repository>
+	</repositories>
 	<properties>
 		<java.version>23</java.version>
 		<maven.compiler.source>8</maven.compiler.source>
