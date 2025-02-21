@@ -1,10 +1,10 @@
-package com.handler.file.services;
+package pro.handler.file.services;
 
 
-import com.handler.file.config.FileStorageConfig;
-import com.handler.file.exceptions.FileStorageException;
-import com.handler.file.exceptions.MyFileNotFoundException;
-import com.handler.file.vo.v1.UploadFileResponseVO;
+import pro.handler.file.config.FileStorageConfig;
+import pro.handler.file.exceptions.FileStorageException;
+import pro.handler.file.exceptions.MyFileNotFoundException;
+import pro.handler.file.vo.v1.UploadFileResponseVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;

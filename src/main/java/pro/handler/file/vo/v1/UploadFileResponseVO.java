@@ -1,4 +1,4 @@
-package com.handler.file.vo.v1;
+package pro.handler.file.vo.v1;
 
 import lombok.Getter;
 import lombok.Setter;

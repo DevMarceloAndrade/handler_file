@@ -1,4 +1,4 @@
-package com.handler.file.config;
+package pro.handler.file.config;
 
 import lombok.Getter;
 import lombok.Setter;
