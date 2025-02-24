@@ -24,12 +24,13 @@ import java.util.stream.Collectors;
 @Service
 public class FileStorageService {
     private final Path storageBaseLocation;
-    private final Path UPLOAD_STANDARD_PATH =Path.of("files/");
+    private final Path UPLOAD_STANDARD_PATH;
     private final Path fileStorageLocation;
 
     @Autowired
     public FileStorageService(FileStorageConfig fileStorageConfig) {
         this.storageBaseLocation = Path.of(fileStorageConfig.getUploadDir());
+        this.UPLOAD_STANDARD_PATH = Path.of(fileStorageConfig.getUploadStandardDir());
 
         this.fileStorageLocation = storageBaseLocation
                 .resolve(UPLOAD_STANDARD_PATH)
